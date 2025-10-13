@@ -1,12 +1,13 @@
 import { Stack} from 'expo-router';
 
 import { Container } from '@/components/Container';
-import {Text, TouchableOpacity, View } from 'react-native';
+import {FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Home() {
   const[time, setTime] = useState(0);
   const[counting, setCounting] = useState(false); 
+  const [laps, setLaps] = useState<number[]>([]);
 
   const startTimeRef = useRef<number | null>(null);
   const intervalRef = useRef<number | null>(null);
@@ -43,11 +44,16 @@ export default function Home() {
   const handleReset = () => {
     setTime(0);
     setCounting(false);
+    setLaps([]);
     savedTimeRef.current = 0;
   }
 
-  const formatTime= () => {
-    const ms = ((Math.floor(time / 1000))/10);
+  const handleLap = () => {
+    setLaps([...laps, time])
+  }
+
+  const formatTime = (time: number) => {
+    const ms = Math.floor((time % 1000) / 10);
     const sec = ((Math.floor(time / 1000))%60);
     const min = ((Math.floor(time / 60000))%60);
     return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}:${String(ms).padStart(2,'0')}`
@@ -57,19 +63,47 @@ export default function Home() {
       <Stack.Screen options={{ title: 'StopWatch' }} />
       <Container>
         <View className = "w-full mt-12">
-          <Text className = "text-center font-mono text-7xl">{formatTime()}</Text>
+          <Text className = "text-center font-mono text-7xl">{formatTime(time)}</Text>
           </View>
 
-          <View className='flex flex-row justify-between'>
-          <TouchableOpacity onPress={handleReset} className='w-20 h-20 item-center rounded-full bg-gray-500 justify-center'>
+        <View className="mt-12 flex flex-row justify-between">
+          {counting ? (
+          <TouchableOpacity onPress={handleLap} className='w-20 h-20 items-center rounded-full bg-gray-500 justify-center'>
+            <Text className='text-xl text-white'>Lap</Text>
+          </TouchableOpacity>
+          ):(
+          <TouchableOpacity onPress={handleReset} className='w-20 h-20 items-center rounded-full bg-gray-500 justify-center'>
             <Text className='text-xl text-white'>Reset</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={toggleCounting} className='w-20 h-20 item-center rounded-full bg-green-800 justify-center'>
+          )}
+
+          {counting ? (
+          <TouchableOpacity onPress={toggleCounting} className='w-20 h-20 items-center rounded-full bg-red-800 justify-center'>
+            <Text className='text-xl text-white'>Stop</Text>
+          </TouchableOpacity>
+          ):(
+          <TouchableOpacity onPress={toggleCounting} className='w-20 h-20 items-center rounded-full bg-green-800 justify-center'>
             <Text className='text-xl text-white'>Start</Text>
           </TouchableOpacity>
-          </View>
 
-          <View className='my-8 h-[1px] w-full bg-gray-300'> </View>
+          )}
+        </View>
+
+        <View className='my-8 h-[1px] w-full bg-gray-300'/>
+        <FlatList
+        data={laps}
+          keyExtractor={(item) => item.toString()}
+          inverted
+          renderItem={({ item, index }) => (
+            <View>
+              <View className="flex flex-row justify-between">
+                <Text className="text-xl">Lap {index + 1} </Text>
+                <Text className="text-xl">{formatTime(item)}</Text>
+              </View>
+              <View className="my-2 h-[1px] w-full bg-gray-300" />
+            </View>
+          )}
+        />
       </Container>
     </>
   );
