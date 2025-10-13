@@ -1,4 +1,4 @@
-import { Stack} from 'expo-router';
+import { Stack, useRouter} from 'expo-router';
 
 import { Container } from '@/components/Container';
 import {FlatList, Text, TouchableOpacity, View } from 'react-native';
