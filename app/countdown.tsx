@@ -7,9 +7,9 @@ export default function CountDown() {
     <>
       <Stack.Screen options={{ title: 'clock' }} />
       <Container>
-        <View className="mt-12 flex flex-row justify-between">
-          <TouchableOpacity className="w-20 h-20 items-center rounded-full bg-gray-500 justify-center">
-            <Text className="text-xl text-white">Not implemented yet</Text>
+        <View className="mt-12 flex flex-row justify-center">
+          <TouchableOpacity>
+            <Text className="text-xl text-black">Not implemented yet</Text>
           </TouchableOpacity>
         </View>
 
