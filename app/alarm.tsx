@@ -1,6 +1,5 @@
 import { Stack } from 'expo-router';
 import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native';
-import ToggleSwitch from 'toggle-switch-react-native';
 import { Container } from '@/components/Container';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
