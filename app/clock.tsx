@@ -33,9 +33,6 @@ export default function Clock() {
     return `${h}:${m}:${s}`;
   };
 
-
-
-
   return (
     <>
       <Stack.Screen options={{ title: "Clock" }} />
